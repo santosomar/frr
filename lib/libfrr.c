@@ -303,21 +303,6 @@ bool frr_zclient_addr(struct sockaddr_storage *sa, socklen_t *sa_len,
 #else
 		*sa_len = sizeof(suna->sun_family) + strlen(suna->sun_path);
 #endif /* HAVE_STRUCT_SOCKADDR_UN_SUN_LEN */
-#if 0
-		/* this is left here for future reference;  Linux abstract
-		 * socket namespace support can be enabled by replacing
-		 * above #if 0 with #ifdef GNU_LINUX.
-		 *
-		 * THIS IS A SECURITY ISSUE, the abstract socket namespace
-		 * does not have user/group permission control on sockets.
-		 * we'd need to implement SCM_CREDENTIALS support first to
-		 * check that only proper users can connect to abstract
-		 * sockets. (same problem as tcp-zebra, except there is a
-		 * fix with SCM_CREDENTIALS.  tcp-zebra has no such fix.)
-		 */
-		if (suna->sun_path[0] == '@')
-			suna->sun_path[0] = '\0';
-#endif
 	}
 	return true;
 }
