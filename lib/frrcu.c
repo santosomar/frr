@@ -412,16 +412,7 @@ static void rcu_do(struct rcu_head *rh)
 
 static void rcu_watchdog(struct rcu_thread *rt)
 {
-#if 0
-	/* future work: print a backtrace for the thread that's holding up
-	 * RCU.  The only (good) way of doing that is to send a signal to the
-	 * other thread, save away the backtrace in the signal handler, and
-	 * block here until the signal is done processing.
-	 *
-	 * Just haven't implemented that yet.
-	 */
-	fprintf(stderr, "RCU watchdog %p\n", rt);
-#endif
+        /* TODO: implement watchdog logging */
 }
 
 static void *rcu_main(void *arg)

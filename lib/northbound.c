@@ -568,31 +568,6 @@ static int nb_lyd_diff_get_op(const struct lyd_node *dnode)
 	return 'n';
 }
 
-#if 0 /* Used below in nb_config_diff inside normally disabled code */
-static inline void nb_config_diff_dnode_log_path(const char *context,
-						 const char *path,
-						 const struct lyd_node *dnode)
-{
-	if (dnode->schema->nodetype & LYD_NODE_TERM)
-		zlog_debug("nb_config_diff: %s: %s: %s", context, path,
-			   lyd_get_value(dnode));
-	else
-		zlog_debug("nb_config_diff: %s: %s", context, path);
-}
-
-static inline void nb_config_diff_dnode_log(const char *context,
-					    const struct lyd_node *dnode)
-{
-	if (!dnode) {
-		zlog_debug("nb_config_diff: %s: NULL", context);
-		return;
-	}
-
-	char *path = lyd_path(dnode, LYD_PATH_STD, NULL, 0);
-	nb_config_diff_dnode_log_path(context, path, dnode);
-	free(path);
-}
-#endif
 
 /*
  * Calculate the delta between two different configurations.
@@ -612,22 +587,6 @@ void nb_config_diff(const struct nb_config *config1,
 	LY_ERR err;
 	char *path;
 
-#if 0 /* Useful (noisy) when debugging diff code, and for improving later */
-	if (DEBUG_MODE_CHECK(&nb_dbg_cbs_config, DEBUG_MODE_ALL)) {
-		LY_LIST_FOR(config1->dnode, root) {
-			LYD_TREE_DFS_BEGIN(root, dnode) {
-				nb_config_diff_dnode_log("from", dnode);
-				LYD_TREE_DFS_END(root, dnode);
-			}
-		}
-		LY_LIST_FOR(config2->dnode, root) {
-			LYD_TREE_DFS_BEGIN(root, dnode) {
-				nb_config_diff_dnode_log("to", dnode);
-				LYD_TREE_DFS_END(root, dnode);
-			}
-		}
-	}
-#endif
 
 	err = lyd_diff_siblings(config1->dnode, config2->dnode,
 				LYD_DIFF_DEFAULTS, &diff);
@@ -651,14 +610,6 @@ void nb_config_diff(const struct nb_config *config1,
 
 			path = lyd_path(dnode, LYD_PATH_STD, NULL, 0);
 
-#if 0 /* Useful (noisy) when debugging diff code, and for improving later */
-			if (DEBUG_MODE_CHECK(&nb_dbg_cbs_config, DEBUG_MODE_ALL)) {
-				char context[80];
-				snprintf(context, sizeof(context),
-					 "iterating diff: oper: %c seq: %u", op, seq);
-				nb_config_diff_dnode_log_path(context, path, dnode);
-			}
-#endif
 			switch (op) {
 			case 'c': /* create */
 				  /*

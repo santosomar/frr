@@ -869,14 +869,6 @@ int ifam_read(struct ifa_msghdr *ifam)
 			dest_same = true;
 	}
 
-#if 0
-  /* it might seem cute to grab the interface metric here, however
-   * we're processing an address update message, and so some systems
-   * (e.g. FBSD) dont bother to fill in ifam_metric. Disabled, but left
-   * in deliberately, as comment.
-   */
-  ifp->metric = ifam->ifam_metric;
-#endif
 
 	/* Add connected address. */
 	switch (sockunion_family(&addr)) {

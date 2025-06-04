@@ -84,10 +84,6 @@ extern struct frrmod_runtime *frrmod_load(const char *spec, const char *dir,
 					  void (*pFerrlog)(const void *,
 							   const char *),
 					  const void *pErrlogCookie);
-#if 0
-/* not implemented yet */
-extern void frrmod_unload(struct frrmod_runtime *module);
-#endif
 
 #ifdef __cplusplus
 }

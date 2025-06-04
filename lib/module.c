@@ -197,11 +197,6 @@ out_fail:
 	return NULL;
 }
 
-#if 0
-void frrmod_unload(struct frrmod_runtime *module)
-{
-}
-#endif
 
 void frrmod_terminate(void)
 {
