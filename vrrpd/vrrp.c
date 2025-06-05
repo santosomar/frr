@@ -133,15 +133,6 @@ static bool vrrp_is_owner(struct interface *ifp, struct ipaddr *addr)
 
 	return false;
 
-#if 0
-	struct prefix p;
-
-	p.family = IS_IPADDR_V4(addr) ? AF_INET : AF_INET6;
-	p.prefixlen = IS_IPADDR_V4(addr) ? IPV4_MAX_BITLEN : IPV6_MAX_BITLEN;
-	memcpy(&p.u, &addr->ip, sizeof(addr->ip));
-
-	return !!connected_lookup_prefix_exact(ifp, &p);
-#endif
 }
 
 /*
@@ -294,22 +285,12 @@ void vrrp_check_start(struct vrrp_vrouter *vr)
 	/* Must have a parent interface */
 	start = start && (vr->ifp != NULL);
 	whynot = (!start && !whynot) ? "No base interface" : whynot;
-#if 0
-	/* Parent interface must be up */
-	start = start && if_is_operative(vr->ifp);
-	start = (!start && !whynot) ? "Base interface inoperative" : whynot;
-#endif
 	/* Parent interface must have at least one v4 */
 	start = start && connected_count_by_family(vr->ifp, AF_INET) > 0;
 	whynot = (!start && !whynot) ? "No primary IPv4 address" : whynot;
 	/* Must have a macvlan interface */
 	start = start && (r->mvl_ifp != NULL);
 	whynot = (!start && !whynot) ? "No VRRP interface" : whynot;
-#if 0
-	/* Macvlan interface must be admin up */
-	start = start && CHECK_FLAG(r->mvl_ifp->flags, IFF_UP);
-	start = (!start && !whynot) ? "Macvlan device admin down" : whynot;
-#endif
 	/* Must have at least one VIP configured */
 	start = start && r->addrs->count > 0;
 	whynot = (!start && !whynot) ? "No Virtual IP address configured"
@@ -333,28 +314,9 @@ void vrrp_check_start(struct vrrp_vrouter *vr)
 	/* Must have a parent interface */
 	start = start && (vr->ifp != NULL);
 	whynot = (!start && !whynot) ? "No base interface" : whynot;
-#if 0
-	/* Parent interface must be up */
-	start = start && if_is_operative(vr->ifp);
-	start = (!start && !whynot) ? "Base interface inoperative" : whynot;
-#endif
 	/* Must have a macvlan interface */
 	start = start && (r->mvl_ifp != NULL);
 	whynot = (!start && !whynot) ? "No VRRP interface" : whynot;
-#if 0
-	/* Macvlan interface must be admin up */
-	start = start && CHECK_FLAG(r->mvl_ifp->flags, IFF_UP);
-	start = (!start && !whynot) ? "Macvlan device admin down" : whynot;
-	/* Macvlan interface must have a link local */
-	start = start && connected_get_linklocal(r->mvl_ifp);
-	whynot =
-		(!start && !whynot) ? "No link local address configured" : whynot;
-	/* Macvlan interface must have a v6 IP besides the link local */
-	start = start && (connected_count_by_family(r->mvl_ifp, AF_INET6) > 1);
-	whynot = (!start && !whynot)
-			 ? "No Virtual IPv6 address configured on macvlan device"
-			 : whynot;
-#endif
 	/* Must have at least one VIP configured */
 	start = start && r->addrs->count > 0;
 	whynot =

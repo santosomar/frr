@@ -59,26 +59,7 @@ bool typesafe_dlist_member(const struct dlist_head *head,
 	return false;
 }
 
-#if 0
-static void hash_consistency_check(struct thash_head *head)
-{
-	uint32_t i;
-	struct thash_item *item, *prev;
-
-	for (i = 0; i < HASH_SIZE(*head); i++) {
-		item = head->entries[i];
-		prev = NULL;
-		while (item) {
-			assert(HASH_KEY(*head, item->hashval) == i);
-			assert(!prev || item->hashval >= prev->hashval);
-			prev = item;
-			item = item->next;
-		}
-	}
-}
-#else
 #define hash_consistency_check(x)
-#endif
 
 void typesafe_hash_grow(struct thash_head *head)
 {
@@ -465,30 +446,7 @@ struct sskip_item *typesafe_skiplist_pop(struct sskip_head *head)
 
 /* heap */
 
-#if 0
-static void heap_consistency_check(struct heap_head *head,
-				   int (*cmpfn)(const struct heap_item *a,
-						const struct heap_item *b),
-				   uint32_t pos)
-{
-	uint32_t rghtpos = pos + 1;
-	uint32_t downpos = HEAP_NARY * (pos + 1);
-
-	if (pos + 1 > ~0U / HEAP_NARY)
-		downpos = ~0U;
-
-	if ((pos & (HEAP_NARY - 1)) != HEAP_NARY - 1 && rghtpos < head->count) {
-		assert(cmpfn(head->array[rghtpos], head->array[pos]) >= 0);
-		heap_consistency_check(head, cmpfn, rghtpos);
-	}
-	if (downpos < head->count) {
-		assert(cmpfn(head->array[downpos], head->array[pos]) >= 0);
-		heap_consistency_check(head, cmpfn, downpos);
-	}
-}
-#else
 #define heap_consistency_check(head, cmpfn, pos)
-#endif
 
 void typesafe_heap_resize(struct heap_head *head, bool grow)
 {

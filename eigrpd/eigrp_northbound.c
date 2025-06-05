@@ -33,10 +33,6 @@ static void redistribute_get_metrics(const struct lyd_node *dnode,
 		em->bandwidth = yang_dnode_get_uint32(dnode, "bandwidth");
 	if (yang_dnode_exists(dnode, "delay"))
 		em->delay = yang_dnode_get_uint32(dnode, "delay");
-#if 0 /* TODO: How does MTU work? */
-	if (yang_dnode_exists(dnode, "mtu"))
-		em->mtu[0] = yang_dnode_get_uint32(dnode, "mtu");
-#endif
 	if (yang_dnode_exists(dnode, "load"))
 		em->load = yang_dnode_get_uint32(dnode, "load");
 	if (yang_dnode_exists(dnode, "reliability"))
