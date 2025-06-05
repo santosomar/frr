@@ -3977,10 +3977,6 @@ int vty_mgmt_send_config_data(struct vty *vty, const char *xpath_base,
 		 */
 		vty_out(vty, "%% Couldn't apply changes: %s", err_buf);
 
-#if 0 // or do we expect the caller to do this?
-		/* the candidate is no longer valid so restore it */
-		nb_config_replace(vty->candidate_config, running_config, true);
-#endif
 error:
 		if (implicit_commit) {
 			vty_mgmt_unlock_running_inline(vty);
