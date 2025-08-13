@@ -15,6 +15,7 @@ FRRouting Developer's Guide
    testing
    mgmtd-dev
    bgpd
+   bgp-config-parsing
    fpm
    grpc
    ospf
